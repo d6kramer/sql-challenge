@@ -49,3 +49,50 @@ CREATE VIEW data_analysis_02 AS
 	FROM employees
 	WHERE hire_date >= '01/01/1986'
 	AND hire_date <= '12/31/1986';
+
+CREATE VIEW data_analysis_03 AS
+	SELECT d.dept_no, d.dept_name, dm.emp_no, e.last_name, e.first_name
+	FROM departments d
+	JOIN dept_manager dm USING (dept_no)
+	JOIN employees e USING (emp_no);
+	
+CREATE VIEW data_analysis_04 AS
+	SELECT d.dept_no, de.emp_no, e.last_name, e.first_name, d.dept_name
+	FROM departments d
+	JOIN dept_emp de USING (dept_no)
+	JOIN employees e USING (emp_no);
+	
+CREATE VIEW data_analysis_05 AS
+	SELECT first_name, last_name, sex
+	FROM employees
+	WHERE first_name = 'Hercules'
+	AND last_name LIKE 'B%';
+
+CREATE VIEW data_analysis_06 AS
+	SELECT emp_no, last_name, first_name
+	FROM employees
+	WHERE emp_no IN 
+	(
+		SELECT emp_no
+		FROM dept_emp
+		WHERE dept_no IN 
+		(
+			SELECT dept_no
+			FROM departments
+			WHERE dept_name = 'Sales' 
+		)
+	);
+	
+CREATE VIEW data_analysis_07 AS
+	SELECT de.emp_no, e.last_name, e.first_name, d.dept_name
+	FROM DEPARTMENTS d
+	JOIN dept_emp de USING (dept_no)
+	JOIN employees e USING (emp_no)
+	WHERE dept_name = 'Sales'
+	OR dept_name = 'Development';
+
+CREATE VIEW data_analysis_08 AS
+	SELECT last_name, COUNT(last_name) AS "Number of Employees"
+	FROM employees
+	GROUP BY last_name
+	ORDER BY "Number of Employees" DESC;
